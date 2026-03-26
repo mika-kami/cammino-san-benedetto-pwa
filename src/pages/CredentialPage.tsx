@@ -21,7 +21,7 @@ export default function CredentialPage() {
           {t('credential.testimonium_message')}
         </p>
         <div className="card" style={{ textAlign: 'left' }}>
-          <div style={{ fontWeight: 600, marginBottom: '8px' }}>{progress.pilgrim_name || 'Pellegrino'}</div>
+          <div style={{ fontWeight: 600, marginBottom: '8px' }}>{progress.pilgrim_name || 'Pilgrim'}</div>
           <div style={{ fontSize: '0.85rem', color: 'var(--color-text-light)' }}>
             {t('credential.start_date')}: {progress.start_date || '—'}
           </div>
@@ -47,7 +47,7 @@ export default function CredentialPage() {
         <label style={{ fontSize: '0.85rem', color: 'var(--color-text-light)', display: 'block', marginBottom: '4px' }}>
           {t('credential.pilgrim_name')}
         </label>
-        <input type="text" value={progress.pilgrim_name} onChange={e => setName(e.target.value)} placeholder="Nome / Name" />
+        <input type="text" value={progress.pilgrim_name} onChange={e => setName(e.target.value)} placeholder="Name" />
         <label style={{ fontSize: '0.85rem', color: 'var(--color-text-light)', display: 'block', marginTop: '12px', marginBottom: '4px' }}>
           {t('credential.start_date')}
         </label>

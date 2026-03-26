@@ -7,7 +7,7 @@ interface Settings {
 }
 
 const DEFAULT_SETTINGS: Settings = {
-  language: 'it',
+  language: 'en',
   units: 'metric',
   outdoor_mode: false
 };

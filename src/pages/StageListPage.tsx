@@ -42,7 +42,7 @@ export default function StageListPage() {
               </div>
               {stage.variant_of && (
                 <div style={{ fontSize: '0.8rem', color: 'var(--color-text-light)', fontStyle: 'italic' }}>
-                  Variante via San Domenico
+                  Variant via San Domenico
                 </div>
               )}
             </div>

@@ -24,7 +24,7 @@ function getStoredLanguage(): SupportedLanguage {
   } catch {
     // ignore parse errors
   }
-  return 'it';
+  return 'en';
 }
 
 i18n.use(initReactI18next).init({
