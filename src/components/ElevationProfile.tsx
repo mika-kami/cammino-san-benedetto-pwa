@@ -1,13 +1,10 @@
 import { useMemo } from 'react';
 import { generateElevationProfile, getMinMaxElevation } from '../utils/elevation';
-import { useTranslation } from 'react-i18next';
-
 interface Props {
   stageNumber: number | string;
 }
 
 export default function ElevationProfile({ stageNumber }: Props) {
-  const { t } = useTranslation();
   const profile = useMemo(() => generateElevationProfile(stageNumber), [stageNumber]);
   const { min, max } = useMemo(() => getMinMaxElevation(profile), [profile]);
 
