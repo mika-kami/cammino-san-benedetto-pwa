@@ -13,6 +13,11 @@ const it = {
     total_distance: 'Distanza Totale',
     total_stages: 'Tappe Totali',
     start_walking: 'Inizia a Camminare',
+    refresh_data: 'Aggiorna Tutti i Dati',
+    refreshing: 'Aggiornamento...',
+    refresh_success: 'Aggiornato',
+    refresh_error: 'Impossibile connettersi',
+    last_refreshed: 'Ultimo aggiornamento',
   },
   stage: {
     distance: 'Distanza',

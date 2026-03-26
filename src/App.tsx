@@ -7,6 +7,7 @@ import MapPage from './pages/MapPage';
 import AccommodationPage from './pages/AccommodationPage';
 import CredentialPage from './pages/CredentialPage';
 import SettingsPage from './pages/SettingsPage';
+import LanguageSelector from './components/LanguageSelector';
 import { useSettings } from './hooks/useSettings';
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
 
   return (
     <div className={settings.outdoor_mode ? 'outdoor-mode' : ''}>
+      <LanguageSelector />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/stages" element={<StageListPage />} />

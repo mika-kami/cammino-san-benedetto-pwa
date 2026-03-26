@@ -266,6 +266,60 @@ input[type="text"], input[type="date"] {
 }
 .outdoor-mode .stage-name, .outdoor-mode .page-title, .outdoor-mode .accommodation-name { font-weight: 800; }
 
+.lang-selector {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 1001;
+}
+
+.lang-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: white;
+  box-shadow: var(--shadow);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lang-dropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  min-width: 160px;
+  animation: fadeIn 0.2s ease;
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: var(--color-text);
+  text-align: left;
+}
+
+.lang-option:hover { background: var(--color-bg); }
+.lang-option.active { background: var(--color-bg); color: var(--color-primary); font-weight: 600; }
+.lang-flag { font-weight: 700; font-size: 0.75rem; color: var(--color-text-light); width: 20px; }
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }

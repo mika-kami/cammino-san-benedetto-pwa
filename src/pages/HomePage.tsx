@@ -1,15 +1,43 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { stages } from '../data/stages';
-import { alerts } from '../data/alerts';
+import { alerts as staticAlerts } from '../data/alerts';
 import { useProgress } from '../hooks/useProgress';
+import { useDataRefresh } from '../hooks/useDataRefresh';
 
 export default function HomePage() {
   const { t } = useTranslation();
   const { progress } = useProgress();
+  const { liveAlerts, lastRefreshed, isRefreshing, refreshError, triggerRefresh } = useDataRefresh();
+  const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
   const completedCount = progress.stages_completed.length;
   const totalDistance = stages.reduce((sum, s) => sum + s.distance_km, 0).toFixed(0);
+
+  // Use live alerts when available, otherwise fall back to static
+  const alerts = liveAlerts.length > 0 ? liveAlerts : staticAlerts;
   const activeAlerts = alerts.filter(a => a.severity === 'closed' || a.severity === 'warning');
+
+  const handleRefresh = async () => {
+    setStatusMessage(null);
+    await triggerRefresh();
+  };
+
+  // Show status after refresh completes
+  useEffect(() => {
+    if (isRefreshing) return;
+    if (refreshError) {
+      setStatusMessage({ type: 'error', text: refreshError });
+      const timer = setTimeout(() => setStatusMessage(null), 5000);
+      return () => clearTimeout(timer);
+    }
+    if (lastRefreshed) {
+      setStatusMessage({ type: 'success', text: new Date(lastRefreshed).toLocaleString() });
+      const timer = setTimeout(() => setStatusMessage(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isRefreshing, refreshError, lastRefreshed]);
 
   return (
     <div className="page">
@@ -53,6 +81,29 @@ export default function HomePage() {
         <Link to="/map" className="btn btn-secondary btn-block" style={{ textDecoration: 'none' }}>
           {t('nav.map')}
         </Link>
+      </div>
+
+      {/* Refresh Data Button */}
+      <div style={{ marginTop: '16px', textAlign: 'center' }}>
+        <button
+          className="btn btn-secondary btn-block"
+          onClick={handleRefresh}
+          disabled={isRefreshing}
+        >
+          {isRefreshing ? t('home.refreshing') : `🔄 ${t('home.refresh_data')}`}
+        </button>
+
+        {statusMessage && (
+          <div style={{ marginTop: '8px', fontSize: '0.85rem', color: statusMessage.type === 'success' ? 'var(--color-success)' : 'var(--color-danger)' }}>
+            {statusMessage.type === 'success' ? '✅' : '❌'} {statusMessage.type === 'success' ? `${t('home.refresh_success')} ${statusMessage.text}` : t('home.refresh_error')}
+          </div>
+        )}
+
+        {lastRefreshed && !statusMessage && (
+          <div style={{ marginTop: '8px', fontSize: '0.8rem', color: 'var(--color-text-light)' }}>
+            {t('home.last_refreshed')}: {new Date(lastRefreshed).toLocaleString()}
+          </div>
+        )}
       </div>
 
       {activeAlerts.length > 0 && (

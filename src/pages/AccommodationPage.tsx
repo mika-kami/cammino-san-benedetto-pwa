@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { accommodations } from '../data/accommodations';
+import { useDataRefresh } from '../hooks/useDataRefresh';
 
 const TYPES = ['all', 'ostello', 'hotel', 'bb', 'agriturismo', 'donativo', 'affittacamere', 'religious'] as const;
 
 export default function AccommodationPage() {
   const { t } = useTranslation();
+  const { accommodationsLastChecked } = useDataRefresh();
   const [filter, setFilter] = useState<string>('all');
   const [stageFilter, setStageFilter] = useState<number>(0);
 
@@ -41,7 +43,7 @@ export default function AccommodationPage() {
 
       <div style={{ fontSize: '0.85rem', color: 'var(--color-text-light)', marginBottom: '12px' }}>
         {filtered.length} {t('nav.accommodations')}
-        {filtered.length > 0 && ` · ${t('accommodation.last_scraped')}: ${new Date(filtered[0].last_scraped).toLocaleDateString()}`}
+        {filtered.length > 0 && ` · ${t('accommodation.last_scraped')}: ${new Date(accommodationsLastChecked || filtered[0].last_scraped).toLocaleDateString()}`}
       </div>
 
       {filtered.map(acc => (

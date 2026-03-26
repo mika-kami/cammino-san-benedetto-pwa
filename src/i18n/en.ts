@@ -13,6 +13,11 @@ const en = {
     total_distance: 'Total Distance',
     total_stages: 'Total Stages',
     start_walking: 'Start Walking',
+    refresh_data: 'Refresh All Data',
+    refreshing: 'Updating...',
+    refresh_success: 'Updated',
+    refresh_error: 'Could not connect',
+    last_refreshed: 'Last refreshed',
   },
   stage: {
     distance: 'Distance',

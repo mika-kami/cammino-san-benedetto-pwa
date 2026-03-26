@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'prompt',
+      registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons/*.png', 'gpx/*.gpx', 'data/*.json'],
       manifest: {
         name: 'Cammino di San Benedetto',
