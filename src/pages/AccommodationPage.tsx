@@ -61,6 +61,7 @@ export default function AccommodationPage() {
             {acc.credential_required && <span className="badge badge-credential">💛 {t('accommodation.credential_required')}</span>}
             {acc.pilgrim_stamp && <span className="badge badge-stamp">{t('accommodation.stamp_point')}</span>}
             {acc.cin_compliant && <span className="badge badge-cin">CIN</span>}
+            {acc.source && <span className="badge badge-source">{t(`accommodation.source.${acc.source}`)}</span>}
             {acc.rating && <span style={{ fontSize: '0.85rem' }}>⭐ {acc.rating} ({acc.rating_count})</span>}
           </div>
           {acc.notes && <div style={{ fontSize: '0.85rem', fontStyle: 'italic', color: 'var(--color-text-light)' }}>{acc.notes}</div>}

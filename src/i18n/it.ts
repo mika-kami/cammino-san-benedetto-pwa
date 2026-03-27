@@ -51,6 +51,14 @@ const it = {
     call: 'Chiama',
     directions: 'Indicazioni',
     view_source: 'Vedi Fonte',
+    source: {
+      camminodibenedetto: 'Sito Ufficiale',
+      dormireincammino: 'Dormire in Cammino',
+      booking: 'Booking.com',
+      google: 'Google',
+      direct: 'Diretto',
+      'pilgrim-guide': 'Guida del Pellegrino',
+    },
     type: {
       ostello: 'Ostello',
       hotel: 'Hotel',
