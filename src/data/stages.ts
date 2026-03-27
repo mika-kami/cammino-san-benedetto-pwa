@@ -25,7 +25,7 @@ export const stages: StageData[] = [
     min_elevation_m: 550, max_elevation_m: 1050,
     difficulty: 'medium', estimated_hours_walking: 5.5,
     terrain: ['sentiero', 'carrareccia', 'asphalt_minor'],
-    gpx_filename: 'cammino-san-benedetto-stage-01-norcia-cascia.gpx',
+    gpx_filename: '01-norcia-cascia.gpx',
     variant_of: null, description_key: 'stage.desc.1'
   },
   {
@@ -36,7 +36,7 @@ export const stages: StageData[] = [
     min_elevation_m: 640, max_elevation_m: 1050,
     difficulty: 'medium', estimated_hours_walking: 5.5,
     terrain: ['sentiero', 'sterrato', 'asphalt_minor'],
-    gpx_filename: 'cammino-san-benedetto-stage-02-cascia-monteleone.gpx',
+    gpx_filename: '02-cascia-monteleone.gpx',
     variant_of: null, description_key: 'stage.desc.2'
   },
   {
@@ -47,7 +47,7 @@ export const stages: StageData[] = [
     min_elevation_m: 900, max_elevation_m: 1100,
     difficulty: 'easy', estimated_hours_walking: 3.5,
     terrain: ['sentiero', 'carrareccia', 'sterrato'],
-    gpx_filename: 'cammino-san-benedetto-stage-03-monteleone-leonessa.gpx',
+    gpx_filename: '03-monteleone-leonessa.gpx',
     variant_of: null, description_key: 'stage.desc.3'
   },
   {
@@ -58,7 +58,7 @@ export const stages: StageData[] = [
     min_elevation_m: 700, max_elevation_m: 1300,
     difficulty: 'hard', estimated_hours_walking: 4.5,
     terrain: ['sentiero', 'mulattiera', 'sterrato'],
-    gpx_filename: 'cammino-san-benedetto-stage-04-leonessa-poggio-bustone.gpx',
+    gpx_filename: '04-leonessa-poggio-bustone.gpx',
     variant_of: null, description_key: 'stage.desc.4'
   },
   {
@@ -69,7 +69,7 @@ export const stages: StageData[] = [
     min_elevation_m: 390, max_elevation_m: 800,
     difficulty: 'medium', estimated_hours_walking: 5.0,
     terrain: ['sentiero', 'asphalt_minor', 'sterrato'],
-    gpx_filename: 'cammino-san-benedetto-stage-05-poggio-bustone-rieti.gpx',
+    gpx_filename: '05-poggio-bustone-rieti.gpx',
     variant_of: null, description_key: 'stage.desc.5'
   },
   {
@@ -80,7 +80,7 @@ export const stages: StageData[] = [
     min_elevation_m: 380, max_elevation_m: 700,
     difficulty: 'hard', estimated_hours_walking: 6.0,
     terrain: ['sterrato', 'carrareccia', 'asphalt_minor'],
-    gpx_filename: 'cammino-san-benedetto-stage-06-rieti-rocca-sinibalda.gpx',
+    gpx_filename: '06-rieti-rocca-sinibalda.gpx',
     variant_of: null, description_key: 'stage.desc.6'
   },
   {
@@ -91,7 +91,7 @@ export const stages: StageData[] = [
     min_elevation_m: 450, max_elevation_m: 900,
     difficulty: 'hard', estimated_hours_walking: 5.0,
     terrain: ['sentiero', 'mulattiera', 'sterrato'],
-    gpx_filename: 'cammino-san-benedetto-stage-07-rocca-sinibalda-castel-di-tora.gpx',
+    gpx_filename: '07-rocca-sinibalda-castel-di-tora-nuova-traccia.gpx',
     variant_of: null, description_key: 'stage.desc.7'
   },
   {
@@ -102,7 +102,7 @@ export const stages: StageData[] = [
     min_elevation_m: 550, max_elevation_m: 1050,
     difficulty: 'hard', estimated_hours_walking: 4.5,
     terrain: ['sentiero', 'mulattiera', 'sterrato'],
-    gpx_filename: 'cammino-san-benedetto-stage-08-castel-di-tora-orvinio.gpx',
+    gpx_filename: '08-castel-di-tora-orvinio.gpx',
     variant_of: null, description_key: 'stage.desc.8'
   },
   {
@@ -113,7 +113,7 @@ export const stages: StageData[] = [
     min_elevation_m: 350, max_elevation_m: 1000,
     difficulty: 'hard', estimated_hours_walking: 6.0,
     terrain: ['sentiero', 'mulattiera', 'carrareccia'],
-    gpx_filename: 'cammino-san-benedetto-stage-09-orvinio-mandela.gpx',
+    gpx_filename: '09-orvinio-mandela.gpx',
     variant_of: null, description_key: 'stage.desc.9'
   },
   {
@@ -124,7 +124,7 @@ export const stages: StageData[] = [
     min_elevation_m: 350, max_elevation_m: 550,
     difficulty: 'strenuous', estimated_hours_walking: 9.0,
     terrain: ['sterrato', 'asphalt_minor', 'carrareccia'],
-    gpx_filename: 'cammino-san-benedetto-stage-10-mandela-subiaco.gpx',
+    gpx_filename: '10-mandela-subiaco.gpx',
     variant_of: null, description_key: 'stage.desc.10'
   },
   {
@@ -135,7 +135,7 @@ export const stages: StageData[] = [
     min_elevation_m: 400, max_elevation_m: 900,
     difficulty: 'medium', estimated_hours_walking: 5.0,
     terrain: ['sentiero', 'sterrato', 'mulattiera'],
-    gpx_filename: 'cammino-san-benedetto-stage-11-subiaco-trevi.gpx',
+    gpx_filename: '11-subiaco-trevi.gpx',
     variant_of: null, description_key: 'stage.desc.11'
   },
   {
@@ -146,7 +146,7 @@ export const stages: StageData[] = [
     min_elevation_m: 500, max_elevation_m: 1100,
     difficulty: 'hard', estimated_hours_walking: 6.5,
     terrain: ['sentiero', 'mulattiera', 'sterrato'],
-    gpx_filename: 'cammino-san-benedetto-stage-12-trevi-collepardo.gpx',
+    gpx_filename: '12-trevi-collepardo.gpx',
     variant_of: null, description_key: 'stage.desc.12'
   },
   {
@@ -157,7 +157,7 @@ export const stages: StageData[] = [
     min_elevation_m: 280, max_elevation_m: 800,
     difficulty: 'hard', estimated_hours_walking: 7.0,
     terrain: ['sentiero', 'sterrato', 'asphalt_minor'],
-    gpx_filename: 'cammino-san-benedetto-stage-13-collepardo-casamari.gpx',
+    gpx_filename: '13-collepardo-casamari.gpx',
     variant_of: null, description_key: 'stage.desc.13'
   },
   {
@@ -168,7 +168,7 @@ export const stages: StageData[] = [
     min_elevation_m: 280, max_elevation_m: 700,
     difficulty: 'hard', estimated_hours_walking: 5.0,
     terrain: ['sterrato', 'sentiero', 'asphalt_minor'],
-    gpx_filename: 'cammino-san-benedetto-stage-14-casamari-arpino.gpx',
+    gpx_filename: '14bis-casamari-arpino-variante-diretta.gpx',
     variant_of: null, description_key: 'stage.desc.14'
   },
   {
@@ -179,7 +179,7 @@ export const stages: StageData[] = [
     min_elevation_m: 280, max_elevation_m: 600,
     difficulty: 'hard', estimated_hours_walking: 6.5,
     terrain: ['sterrato', 'asphalt_minor', 'carrareccia'],
-    gpx_filename: 'cammino-san-benedetto-stage-14b-casamari-arpino-san-domenico.gpx',
+    gpx_filename: '14-casamari-arpino-via-san-domenico.gpx',
     variant_of: 14, description_key: 'stage.desc.14b'
   },
   {
@@ -190,7 +190,7 @@ export const stages: StageData[] = [
     min_elevation_m: 200, max_elevation_m: 750,
     difficulty: 'medium', estimated_hours_walking: 5.5,
     terrain: ['sentiero', 'sterrato', 'asphalt_minor'],
-    gpx_filename: 'cammino-san-benedetto-stage-15-arpino-roccasecca.gpx',
+    gpx_filename: '15-arpino-roccasecca.gpx',
     variant_of: null, description_key: 'stage.desc.15'
   },
   {
@@ -201,7 +201,29 @@ export const stages: StageData[] = [
     min_elevation_m: 200, max_elevation_m: 520,
     difficulty: 'medium', estimated_hours_walking: 5.5,
     terrain: ['sentiero', 'sterrato', 'asphalt_minor'],
-    gpx_filename: 'cammino-san-benedetto-stage-16-roccasecca-montecassino.gpx',
+    gpx_filename: '16-roccasecca-montecassino.gpx',
     variant_of: null, description_key: 'stage.desc.16'
+  },
+  {
+    stage_number: '15b', name: 'Arpino – Roccasecca (Variante diretta)',
+    start: { name: 'Arpino', gps: { lat: 41.6478, lng: 13.6097 }, elevation_m: 450 },
+    end: { name: 'Roccasecca', gps: { lat: 41.5531, lng: 13.6678 }, elevation_m: 245 },
+    distance_km: 13.5, ascent_m: 280, descent_m: 485,
+    min_elevation_m: 200, max_elevation_m: 500,
+    difficulty: 'medium', estimated_hours_walking: 4.0,
+    terrain: ['sterrato', 'asphalt_minor', 'carrareccia'],
+    gpx_filename: '15bis-arpino-roccasecca-variante-diretta.gpx',
+    variant_of: 15, description_key: 'stage.desc.15b'
+  },
+  {
+    stage_number: '16b', name: 'Montecassino – Cassino (per strada romana)',
+    start: { name: 'Montecassino', gps: { lat: 41.4908, lng: 13.8142 }, elevation_m: 516 },
+    end: { name: 'Cassino', gps: { lat: 41.4864, lng: 13.8309 }, elevation_m: 40 },
+    distance_km: 5.0, ascent_m: 30, descent_m: 506,
+    min_elevation_m: 40, max_elevation_m: 520,
+    difficulty: 'easy', estimated_hours_walking: 1.5,
+    terrain: ['sterrato', 'asphalt_minor', 'strada_romana'],
+    gpx_filename: '16bis-montecassino-cassino-per-strada-romana.gpx',
+    variant_of: 16, description_key: 'stage.desc.16b'
   }
 ];

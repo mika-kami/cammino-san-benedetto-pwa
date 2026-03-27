@@ -9,6 +9,10 @@ lerna-debug.log*
 
 node_modules
 dist
+
+# Generated files
+src/data/routes-generated.json
+public/gpx/
 dist-ssr
 *.local
 

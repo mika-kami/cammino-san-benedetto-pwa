@@ -29,13 +29,19 @@ export default function MapPage() {
       maxZoom: 18,
     }).addTo(map);
 
-    // Draw route line through all stages using detailed waypoints
-    stages.filter(s => s.variant_of === null).forEach(stage => {
+    // Draw route lines through all stages using detailed waypoints
+    stages.forEach(stage => {
       const key = String(stage.stage_number);
       const waypoints = stageRoutes[key];
       if (waypoints) {
+        const isVariant = stage.variant_of !== null;
         const points: L.LatLngExpression[] = waypoints.map(([lat, lng]) => [lat, lng]);
-        L.polyline(points, { color: '#7B4B2A', weight: 4, opacity: 0.8 }).addTo(map);
+        L.polyline(points, {
+          color: isVariant ? '#A0522D' : '#7B4B2A',
+          weight: isVariant ? 3 : 4,
+          opacity: isVariant ? 0.6 : 0.8,
+          dashArray: isVariant ? '8 6' : undefined,
+        }).addTo(map);
       }
     });
 
