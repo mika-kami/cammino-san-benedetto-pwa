@@ -57,7 +57,10 @@ export function useDataRefresh() {
 
     try {
       const res = await fetch(API_URL);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) {
+        const body = await res.text().catch(() => '');
+        throw new Error(`HTTP ${res.status}: ${body.slice(0, 200)}`);
+      }
 
       const data: RefreshApiResponse = await res.json();
 
@@ -75,8 +78,10 @@ export function useDataRefresh() {
       if (data.accommodations_last_checked) {
         setAccommodationsLastChecked(data.accommodations_last_checked);
       }
-    } catch {
-      setRefreshError('Could not connect');
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Refresh failed';
+      setRefreshError(msg);
+      console.error('[useDataRefresh] error:', err);
     } finally {
       setIsRefreshing(false);
     }

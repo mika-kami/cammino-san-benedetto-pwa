@@ -5,6 +5,7 @@ import { stages } from '../data/stages';
 import { alerts as staticAlerts } from '../data/alerts';
 import { useProgress } from '../hooks/useProgress';
 import { useDataRefresh } from '../hooks/useDataRefresh';
+import { LinkedText } from '../components/LinkedText';
 
 export default function HomePage() {
   const { t } = useTranslation();
@@ -114,7 +115,19 @@ export default function HomePage() {
               <span>{alert.severity === 'closed' ? '🔴' : '⚠️'}</span>
               <div>
                 <strong>{alert.title}</strong>
-                <div style={{ fontSize: '0.8rem', marginTop: '4px' }}>{alert.description}</div>
+                <div style={{ fontSize: '0.8rem', marginTop: '4px' }}>
+                  <LinkedText text={alert.description} />
+                </div>
+                {alert.source_url && (
+                  <a
+                    href={alert.source_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: 'inherit', textDecoration: 'underline', display: 'block', marginTop: 4, fontSize: '0.75rem' }}
+                  >
+                    View on official site ↗
+                  </a>
+                )}
               </div>
             </div>
           ))}
