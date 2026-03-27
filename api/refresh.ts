@@ -90,10 +90,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const timestamp = new Date().toISOString();
 
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+
     const response = await fetch(SOURCE_URL, {
       headers: { 'User-Agent': 'CamminoDiSanBenedetto-PWA/1.0' },
-      signal: AbortSignal.timeout(8000),
+      signal: controller.signal,
     });
+
+    clearTimeout(timeout);
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);

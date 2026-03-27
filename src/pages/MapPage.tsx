@@ -1,16 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import L from 'leaflet';
 import { stages } from '../data/stages';
 import { pois } from '../data/pois';
 import { accommodations } from '../data/accommodations';
 import { alerts } from '../data/alerts';
+import { stageRoutes } from '../data/routes';
 
 export default function MapPage() {
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+
+  const targetLat = searchParams.get('lat');
+  const targetLng = searchParams.get('lng');
 
   useEffect(() => {
     if (!mapRef.current || mapInstanceRef.current) return;
@@ -23,16 +29,15 @@ export default function MapPage() {
       maxZoom: 18,
     }).addTo(map);
 
-    // Draw route line through all stages
-    const routePoints: L.LatLngExpression[] = [];
+    // Draw route line through all stages using detailed waypoints
     stages.filter(s => s.variant_of === null).forEach(stage => {
-      routePoints.push([stage.start.gps.lat, stage.start.gps.lng]);
-      routePoints.push([stage.end.gps.lat, stage.end.gps.lng]);
+      const key = String(stage.stage_number);
+      const waypoints = stageRoutes[key];
+      if (waypoints) {
+        const points: L.LatLngExpression[] = waypoints.map(([lat, lng]) => [lat, lng]);
+        L.polyline(points, { color: '#7B4B2A', weight: 4, opacity: 0.8 }).addTo(map);
+      }
     });
-
-    if (routePoints.length > 0) {
-      L.polyline(routePoints, { color: '#7B4B2A', weight: 4, opacity: 0.8 }).addTo(map);
-    }
 
     // Stage markers
     stages.filter(s => s.variant_of === null).forEach(stage => {
@@ -80,6 +85,7 @@ export default function MapPage() {
     });
 
     // Accommodation markers
+    const accMarkers: { marker: L.Marker; lat: number; lng: number }[] = [];
     accommodations.forEach(acc => {
       const icon = L.divIcon({
         className: 'acc-marker',
@@ -87,10 +93,31 @@ export default function MapPage() {
         iconSize: [10, 10],
         iconAnchor: [5, 5],
       });
-      L.marker([acc.gps.lat, acc.gps.lng], { icon })
+      const marker = L.marker([acc.gps.lat, acc.gps.lng], { icon })
         .addTo(map)
         .bindPopup(`<b>${acc.name}</b><br>${acc.type}<br>${acc.phone ? `<a href="tel:${acc.phone}">${acc.phone}</a>` : ''}`);
+      accMarkers.push({ marker, lat: acc.gps.lat, lng: acc.gps.lng });
     });
+
+    // If URL has ?lat=...&lng=..., zoom to that point and open its popup
+    if (targetLat && targetLng) {
+      const lat = parseFloat(targetLat);
+      const lng = parseFloat(targetLng);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        map.setView([lat, lng], 15);
+
+        // Find the closest marker and open its popup
+        let closest: L.Marker | null = null;
+        let minDist = Infinity;
+        for (const { marker, lat: mLat, lng: mLng } of accMarkers) {
+          const d = (mLat - lat) ** 2 + (mLng - lng) ** 2;
+          if (d < minDist) { minDist = d; closest = marker; }
+        }
+        if (closest && minDist < 0.0001) {
+          closest.openPopup();
+        }
+      }
+    }
 
     // Geolocation
     if ('geolocation' in navigator) {
@@ -105,7 +132,7 @@ export default function MapPage() {
     }
 
     return () => { map.remove(); mapInstanceRef.current = null; };
-  }, [t]);
+  }, [t, targetLat, targetLng]);
 
   // Update user location marker
   useEffect(() => {

@@ -8,7 +8,7 @@ import { stampPoints } from '../data/stamps';
 import { useProgress } from '../hooks/useProgress';
 import ElevationProfile from '../components/ElevationProfile';
 import { generateGpxContent, downloadGpx } from '../utils/gpx';
-import { generateElevationProfile } from '../utils/elevation';
+import { stageRoutes } from '../data/routes';
 
 export default function StageDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -27,12 +27,8 @@ export default function StageDetailPage() {
   const collectedStamps = progress.stamps_collected[String(stageNum)] || [];
 
   const handleDownloadGpx = () => {
-    const profile = generateElevationProfile(stage.stage_number);
-    const points = profile.map((p, i) => ({
-      lat: stage.start.gps.lat + (stage.end.gps.lat - stage.start.gps.lat) * (i / profile.length),
-      lng: stage.start.gps.lng + (stage.end.gps.lng - stage.start.gps.lng) * (i / profile.length),
-      ele: p.elevation
-    }));
+    const waypoints = stageRoutes[String(stage.stage_number)] || [];
+    const points = waypoints.map(([lat, lng, ele]) => ({ lat, lng, ele }));
     downloadGpx(stage.gpx_filename, generateGpxContent(stage.name, points));
   };
 

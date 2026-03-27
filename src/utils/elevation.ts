@@ -1,32 +1,53 @@
 import { stages } from '../data/stages';
+import { stageRoutes } from '../data/routes';
 
 export interface ElevationPoint {
   distance: number; // km from start
   elevation: number; // meters
 }
 
+// Haversine distance between two points in km
+function haversine(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
 export function generateElevationProfile(stageNumber: number | string): ElevationPoint[] {
   const stage = stages.find(s => String(s.stage_number) === String(stageNumber));
   if (!stage) return [];
 
+  const waypoints = stageRoutes[String(stageNumber)];
+  if (!waypoints || waypoints.length < 2) return [];
+
+  // Calculate cumulative distances from waypoints
   const points: ElevationPoint[] = [];
-  const numPoints = 50;
-  const startEle = stage.start.elevation_m;
-  const endEle = stage.end.elevation_m;
-  const totalDist = stage.distance_km;
+  let cumDist = 0;
 
-  for (let i = 0; i <= numPoints; i++) {
-    const t = i / numPoints;
-    const distance = +(t * totalDist).toFixed(2);
+  for (let i = 0; i < waypoints.length; i++) {
+    if (i > 0) {
+      cumDist += haversine(
+        waypoints[i - 1][0], waypoints[i - 1][1],
+        waypoints[i][0], waypoints[i][1]
+      );
+    }
+    points.push({
+      distance: +cumDist.toFixed(2),
+      elevation: waypoints[i][2],
+    });
+  }
 
-    // Create realistic elevation profile with hills
-    const baseEle = startEle + (endEle - startEle) * t;
-    const hillAmplitude = (stage.ascent_m + stage.descent_m) / 6;
-    const hill1 = Math.sin(t * Math.PI * 2.5) * hillAmplitude * 0.6;
-    const hill2 = Math.sin(t * Math.PI * 1.3 + 0.5) * hillAmplitude * 0.4;
-    const elevation = Math.round(baseEle + hill1 + hill2);
-
-    points.push({ distance, elevation });
+  // Scale distances to match the official stage distance
+  const rawTotal = points[points.length - 1].distance;
+  if (rawTotal > 0) {
+    const scale = stage.distance_km / rawTotal;
+    for (const p of points) {
+      p.distance = +(p.distance * scale).toFixed(2);
+    }
   }
 
   return points;
