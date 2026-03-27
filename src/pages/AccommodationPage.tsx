@@ -43,7 +43,14 @@ export default function AccommodationPage() {
 
       <div style={{ fontSize: '0.85rem', color: 'var(--color-text-light)', marginBottom: '12px' }}>
         {filtered.length} {t('nav.accommodations')}
-        {filtered.length > 0 && ` · ${t('accommodation.last_scraped')}: ${new Date(accommodationsLastChecked || filtered[0].last_scraped).toLocaleDateString()}`}
+        {filtered.length > 0 && ` · ${t('accommodation.last_scraped')}: ${new Date(accommodationsLastChecked || filtered[0].last_scraped).toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        })}`}
       </div>
 
       {filtered.map(acc => (

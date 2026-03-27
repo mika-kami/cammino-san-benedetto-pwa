@@ -34,7 +34,16 @@ export default function HomePage() {
       return () => clearTimeout(timer);
     }
     if (lastRefreshed) {
-      setStatusMessage({ type: 'success', text: new Date(lastRefreshed).toLocaleString() });
+      setStatusMessage({
+        type: 'success', text: new Date(lastRefreshed).toLocaleString('en-GB', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false // For 24-hour time, often used in Europe
+        })
+      });
       const timer = setTimeout(() => setStatusMessage(null), 3000);
       return () => clearTimeout(timer);
     }
@@ -102,7 +111,7 @@ export default function HomePage() {
 
         {lastRefreshed && !statusMessage && (
           <div style={{ marginTop: '8px', fontSize: '0.8rem', color: 'var(--color-text-light)' }}>
-            {t('home.last_refreshed')}: {new Date(lastRefreshed).toLocaleString()}
+            {t('home.last_refreshed')}: {new Date(lastRefreshed).toLocaleString('it-IT')}
           </div>
         )}
       </div>
