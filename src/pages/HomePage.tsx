@@ -5,6 +5,7 @@ import { stages } from '../data/stages';
 import { alerts as staticAlerts } from '../data/alerts';
 import { useProgress } from '../hooks/useProgress';
 import { useDataRefresh } from '../hooks/useDataRefresh';
+import { LinkedText } from '../components/LinkedText';
 
 export default function HomePage() {
   const { t } = useTranslation();
@@ -33,7 +34,16 @@ export default function HomePage() {
       return () => clearTimeout(timer);
     }
     if (lastRefreshed) {
-      setStatusMessage({ type: 'success', text: new Date(lastRefreshed).toLocaleString() });
+      setStatusMessage({
+        type: 'success', text: new Date(lastRefreshed).toLocaleString('en-GB', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false // For 24-hour time, often used in Europe
+        })
+      });
       const timer = setTimeout(() => setStatusMessage(null), 3000);
       return () => clearTimeout(timer);
     }
@@ -117,7 +127,7 @@ export default function HomePage() {
 
         {lastRefreshed && !statusMessage && (
           <div style={{ marginTop: '8px', fontSize: '0.8rem', color: 'var(--color-text-light)' }}>
-            {t('home.last_refreshed')}: {new Date(lastRefreshed).toLocaleString()}
+            {t('home.last_refreshed')}: {new Date(lastRefreshed).toLocaleString('it-IT')}
           </div>
         )}
       </div>
@@ -130,7 +140,19 @@ export default function HomePage() {
               <span>{alert.severity === 'closed' ? '🔴' : '⚠️'}</span>
               <div>
                 <strong>{alert.title}</strong>
-                <div style={{ fontSize: '0.8rem', marginTop: '4px' }}>{alert.description}</div>
+                <div style={{ fontSize: '0.8rem', marginTop: '4px' }}>
+                  <LinkedText text={alert.description} />
+                </div>
+                {alert.source_url && (
+                  <a
+                    href={alert.source_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: 'inherit', textDecoration: 'underline', display: 'block', marginTop: 4, fontSize: '0.75rem' }}
+                  >
+                    View on official site ↗
+                  </a>
+                )}
               </div>
             </div>
           ))}

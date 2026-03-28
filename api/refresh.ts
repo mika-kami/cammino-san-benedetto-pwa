@@ -37,32 +37,62 @@ function inferSeverity(text: string): 'info' | 'warning' | 'closed' {
 function extractAlerts(html: string, now: string): ScrapedAlert[] {
   const alerts: ScrapedAlert[] = [];
 
-  // Extract text content from paragraph-like blocks
-  const paragraphs = html.match(/<p[^>]*>([\s\S]*?)<\/p>/gi) || [];
-  const divBlocks = html.match(/<li[^>]*>([\s\S]*?)<\/li>/gi) || [];
-  const allBlocks = [...paragraphs, ...divBlocks];
+  // 1. Try to isolate the main content area first
+  const contentMatch = html.match(/<(?:div|article)[^>]*class="[^"]*(?:entry-content|post-content|content)[^"]*"[^>]*>([\s\S]*?)<\/(?:div|article)>/i);
+  const body = contentMatch ? contentMatch[1] : html;
 
-  for (const block of allBlocks) {
-    // Strip HTML tags to get plain text
-    const text = block.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  // 2. Extract all text-bearing blocks: p, li, h2, h3, div
+  const blockRe = /<(?:p|li|h[23]|div)[^>]*>([\s\S]*?)<\/(?:p|li|h[23]|div)>/gi;
+  const blocks: string[] = [];
+  let m: RegExpExecArray | null;
+  while ((m = blockRe.exec(body)) !== null) {
+    blocks.push(m[1]);
+  }
+
+  // 3. Also extract <strong> and <em> inline for short closures
+  const inlineRe = /<(?:strong|em|b)[^>]*>([\s\S]*?)<\/(?:strong|em|b)>/gi;
+  while ((m = inlineRe.exec(body)) !== null) {
+    blocks.push(m[1]);
+  }
+
+  const seen = new Set<string>();
+
+  for (const block of blocks) {
+    // Preserve links as "text [url]", then strip remaining tags
+    const text = block
+      .replace(/<a[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi, '$2 [$1]')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/\s+/g, ' ')
+      .trim();
 
     if (!ALERT_KEYWORDS.test(text)) continue;
-    if (text.length < 10) continue;
+    if (text.length < 20) continue;
+    if (seen.has(text)) continue;
+    seen.add(text);
+
+    // Extract raw URL from the block for source_url
+    const urlMatch = block.match(/href="(https?:\/\/[^"]+)"/i);
+    const sourceUrl = urlMatch ? urlMatch[1] : SOURCE_URL;
 
     const stageMatch = text.match(STAGE_PATTERN);
     const stageNum = stageMatch ? parseInt(stageMatch[1] || stageMatch[2], 10) : 0;
-
     const severity = inferSeverity(text);
-    const id = `live-alert-${stageNum}-${severity}-${Date.now()}`;
+    const id = `live-alert-${stageNum}-${severity}-${Buffer.from(text.slice(0, 40)).toString('hex')}`;
 
     alerts.push({
       id,
       stage: stageNum,
       severity,
-      title: `${severity === 'closed' ? 'Closure' : 'Alert'}${stageNum ? ` – Stage ${stageNum}` : ''}`,
-      description: text.slice(0, 500),
+      title: severity === 'closed'
+        ? `Closure${stageNum ? ` – Stage ${stageNum}` : ''}`
+        : `Alert${stageNum ? ` – Stage ${stageNum}` : ''}`,
+      description: text.slice(0, 600),
       since: now,
-      source_url: SOURCE_URL,
+      source_url: sourceUrl,
       last_scraped: now,
     });
   }
@@ -81,15 +111,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).end();
   }
 
-  // Return cached response if within TTL
-  const now = Date.now();
-  if (cachedResponse && now - cacheTimestamp < CACHE_TTL_MS) {
-    return res.status(200).json(cachedResponse);
-  }
-
-  const timestamp = new Date().toISOString();
-
   try {
+    // Return cached response if within TTL
+    const now = Date.now();
+    if (cachedResponse && now - cacheTimestamp < CACHE_TTL_MS) {
+      return res.status(200).json(cachedResponse);
+    }
+
+    const timestamp = new Date().toISOString();
+
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000);
 
@@ -105,7 +135,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const html = await response.text();
+
+    console.log('[refresh] html length:', html.length);
+    console.log('[refresh] html snippet:', html.slice(0, 500));
+
     const alerts = extractAlerts(html, timestamp);
+
+    console.log('[refresh] alerts found:', alerts.length);
 
     const result: RefreshResponse = {
       last_updated: timestamp,
@@ -118,15 +154,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     cacheTimestamp = now;
 
     return res.status(200).json(result);
-  } catch {
-    const errorResult: RefreshResponse = {
+  } catch (err) {
+    console.error('[refresh] unhandled error:', err);
+    return res.status(200).json({
       last_updated: null,
       alerts: [],
       accommodations_last_checked: null,
       source: 'camminodibenedetto.it',
-      error: 'Could not reach source',
-    };
-
-    return res.status(200).json(errorResult);
+      error: err instanceof Error ? err.message : 'Unknown error',
+    });
   }
 }

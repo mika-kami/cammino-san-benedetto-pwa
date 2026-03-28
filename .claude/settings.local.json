@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"require\\(''undici''\\)\")",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "WebFetch(domain:cammino-san-benedetto.vercel.app)",
+      "WebFetch(domain:www.camminodibenedetto.it)"
+    ]
+  }
+}
