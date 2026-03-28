@@ -7,9 +7,11 @@ import { pois } from '../data/pois';
 import { accommodations } from '../data/accommodations';
 import { alerts } from '../data/alerts';
 import { stageRoutes } from '../data/routes';
+import { useOnlineStatus } from '../hooks/useOnlineStatus';
 
 export default function MapPage() {
   const { t } = useTranslation();
+  const isOnline = useOnlineStatus();
   const [searchParams] = useSearchParams();
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
@@ -162,8 +164,25 @@ export default function MapPage() {
   };
 
   return (
-    <div className="map-container">
+    <div className="map-container" style={{ position: 'relative' }}>
       <div ref={mapRef} style={{ height: '100%', width: '100%' }} />
+      {!isOnline && (
+        <div style={{
+          position: 'absolute',
+          top: '8px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: 'rgba(0,0,0,0.65)',
+          color: '#fff',
+          padding: '6px 14px',
+          borderRadius: '999px',
+          fontSize: '0.8rem',
+          zIndex: 1000,
+          pointerEvents: 'none',
+        }}>
+          📵 {t('map.offline_tiles_notice')}
+        </div>
+      )}
       <div style={{ position: 'absolute', bottom: 'calc(var(--nav-height) + 16px)', right: '16px', zIndex: 999, display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <button className="btn btn-primary btn-sm" onClick={zoomToRoute} style={{ borderRadius: '50%', width: '44px', height: '44px', padding: 0 }}>
           🗺

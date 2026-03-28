@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '../hooks/useSettings';
+import { useOnlineStatus } from '../hooks/useOnlineStatus';
+import { useDataRefresh } from '../hooks/useDataRefresh';
 
 const LANGUAGES = [
   { code: 'it', label: 'Italiano' },
@@ -12,6 +14,8 @@ const LANGUAGES = [
 export default function SettingsPage() {
   const { t, i18n } = useTranslation();
   const { settings, updateSetting } = useSettings();
+  const isOnline = useOnlineStatus();
+  const { lastRefreshed } = useDataRefresh();
 
   const handleLanguageChange = (lang: string) => {
     updateSetting('language', lang);
@@ -44,7 +48,16 @@ export default function SettingsPage() {
 
         <div className="setting-row">
           <span className="setting-label">{t('settings.offline_status')}</span>
-          <span className="setting-value">{navigator.onLine ? t('common.online') : t('common.offline')}</span>
+          <span style={{ color: isOnline ? 'green' : '#f5a623', fontWeight: 600 }}>
+            {isOnline ? t('common.online') : t('common.offline')}
+          </span>
+        </div>
+
+        <div className="setting-row">
+          <span className="setting-label">{t('settings.last_synced')}</span>
+          <span style={{ color: 'var(--color-text-light)', fontSize: '0.85rem' }}>
+            {lastRefreshed ? new Date(lastRefreshed).toLocaleString() : '—'}
+          </span>
         </div>
 
         <div className="setting-row">

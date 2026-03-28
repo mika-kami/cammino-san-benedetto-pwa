@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       includeAssets: ['favicon.svg', 'icons/*.png', 'gpx/*.gpx', 'data/*.json'],
       manifest: {
         name: 'Cammino di San Benedetto',
@@ -24,6 +24,9 @@ export default defineConfig({
         ]
       },
       workbox: {
+        navigateFallback: '/index.html',
+        navigateFallbackDenylist: [/^\/api\//],
+        cleanupOutdatedCaches: true,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json,gpx}'],
         runtimeCaching: [
           {
@@ -33,6 +36,16 @@ export default defineConfig({
               cacheName: 'osm-tiles',
               expiration: { maxEntries: 5000, maxAgeSeconds: 30 * 24 * 60 * 60 },
               cacheableResponse: { statuses: [0, 200] }
+            }
+          },
+          {
+            urlPattern: /\/api\/refresh/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-refresh-cache',
+              networkTimeoutSeconds: 5,
+              expiration: { maxEntries: 1, maxAgeSeconds: 24 * 60 * 60 },
+              cacheableResponse: { statuses: [200] }
             }
           }
         ]

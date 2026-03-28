@@ -9,7 +9,7 @@ import { useDataRefresh } from '../hooks/useDataRefresh';
 export default function HomePage() {
   const { t } = useTranslation();
   const { progress } = useProgress();
-  const { liveAlerts, lastRefreshed, isRefreshing, refreshError, triggerRefresh } = useDataRefresh();
+  const { liveAlerts, lastRefreshed, isRefreshing, isOnline, refreshError, triggerRefresh } = useDataRefresh();
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const completedCount = progress.stages_completed.length;
@@ -41,6 +41,21 @@ export default function HomePage() {
 
   return (
     <div className="page">
+      {!isOnline && (
+        <div style={{
+          background: '#f5a623',
+          color: '#fff',
+          padding: '8px 16px',
+          borderRadius: 'var(--radius)',
+          marginBottom: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          fontSize: '0.9rem'
+        }}>
+          📵 {t('common.offline')} — {t('home.showing_cached_data')}
+        </div>
+      )}
       <div style={{ textAlign: 'center', padding: '32px 0' }}>
         <div style={{ fontSize: '3rem', marginBottom: '8px' }}>🚶‍♂️</div>
         <h1 className="page-title" style={{ fontSize: '1.8rem', marginBottom: '4px' }}>
@@ -89,6 +104,7 @@ export default function HomePage() {
           className="btn btn-secondary btn-block"
           onClick={handleRefresh}
           disabled={isRefreshing}
+          style={{ opacity: !isOnline ? 0.5 : 1 }}
         >
           {isRefreshing ? t('home.refreshing') : `🔄 ${t('home.refresh_data')}`}
         </button>

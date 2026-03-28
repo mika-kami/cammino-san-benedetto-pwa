@@ -6,6 +6,7 @@ import { pois } from '../data/pois';
 import { alerts } from '../data/alerts';
 import { stampPoints } from '../data/stamps';
 import { useProgress } from '../hooks/useProgress';
+import { useOnlineStatus } from '../hooks/useOnlineStatus';
 import ElevationProfile from '../components/ElevationProfile';
 
 
@@ -13,6 +14,7 @@ export default function StageDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
   const { progress, toggleStageComplete, toggleStamp } = useProgress();
+  const isOnline = useOnlineStatus();
 
   const stage = stages.find(s => String(s.stage_number) === id);
   if (!stage) return <div className="page"><p>{t('common.error')}</p></div>;
@@ -65,10 +67,15 @@ export default function StageDetailPage() {
         <ElevationProfile stageNumber={stage.stage_number} />
       </div>
 
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+      <div style={{ marginBottom: '12px' }}>
         <button className="btn btn-primary btn-block" onClick={handleDownloadGpx}>
           📥 {t('stage.download_gpx')}
         </button>
+        {!isOnline && (
+          <p style={{ fontSize: '0.8rem', color: 'var(--color-text-light)', marginTop: '4px' }}>
+            {t('stage.gpx_offline_note')}
+          </p>
+        )}
       </div>
 
       <button

@@ -18,6 +18,7 @@ const it = {
     refresh_success: 'Aggiornato',
     refresh_error: 'Impossibile connettersi',
     last_refreshed: 'Ultimo aggiornamento',
+    showing_cached_data: 'Dati dalla cache',
   },
   stage: {
     distance: 'Distanza',
@@ -34,6 +35,7 @@ const it = {
     mark_completed: 'Segna come Completata',
     completed: 'Completata',
     alerts: 'Avvisi',
+    gpx_offline_note: 'GPX disponibile offline — già nella cache',
   },
   difficulty: {
     easy: 'Facile',
@@ -94,6 +96,7 @@ const it = {
     off_route_warning: 'Sei fuori dal percorso',
     distance_to_end: 'Distanza alla Fine',
     zoom_to_route: 'Zoom sul Percorso',
+    offline_tiles_notice: 'Offline — solo le aree della mappa già visitate',
   },
   settings: {
     title: 'Impostazioni',
@@ -112,6 +115,8 @@ const it = {
     error: 'Si \u00e8 verificato un errore',
     offline: 'Offline',
     online: 'Online',
+    update_available: 'Aggiornamento disponibile',
+    update_now: 'Aggiorna',
   },
   poi: {
     norcia_basilica:

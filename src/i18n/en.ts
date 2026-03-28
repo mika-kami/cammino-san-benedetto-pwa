@@ -18,6 +18,7 @@ const en = {
     refresh_success: 'Updated',
     refresh_error: 'Could not connect',
     last_refreshed: 'Last refreshed',
+    showing_cached_data: 'Showing cached data',
   },
   stage: {
     distance: 'Distance',
@@ -34,6 +35,7 @@ const en = {
     mark_completed: 'Mark as Completed',
     completed: 'Completed',
     alerts: 'Alerts',
+    gpx_offline_note: 'GPX available offline — previously cached',
   },
   difficulty: {
     easy: 'Easy',
@@ -94,6 +96,7 @@ const en = {
     off_route_warning: 'You are off the route',
     distance_to_end: 'Distance to End',
     zoom_to_route: 'Zoom to Route',
+    offline_tiles_notice: 'Offline — only cached map areas available',
   },
   settings: {
     title: 'Settings',
@@ -112,6 +115,8 @@ const en = {
     error: 'An error occurred',
     offline: 'Offline',
     online: 'Online',
+    update_available: 'App update available',
+    update_now: 'Update now',
   },
   poi: {
     norcia_basilica:

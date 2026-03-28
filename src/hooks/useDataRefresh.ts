@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { RouteAlert } from '../data/alerts';
+import { useOnlineStatus } from './useOnlineStatus';
 
 const STORAGE_KEYS = {
   liveAlerts: 'csb_live_alerts',
@@ -18,6 +19,7 @@ interface RefreshApiResponse {
 }
 
 export function useDataRefresh() {
+  const isOnline = useOnlineStatus();
   const [liveAlerts, setLiveAlerts] = useState<RouteAlert[]>(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEYS.liveAlerts);
@@ -52,6 +54,11 @@ export function useDataRefresh() {
   }, [accommodationsLastChecked]);
 
   const triggerRefresh = useCallback(async () => {
+    if (!isOnline) {
+      setRefreshError('offline');
+      return;
+    }
+
     setIsRefreshing(true);
     setRefreshError(null);
 
@@ -80,13 +87,14 @@ export function useDataRefresh() {
     } finally {
       setIsRefreshing(false);
     }
-  }, []);
+  }, [isOnline]);
 
   return {
     liveAlerts,
     lastRefreshed,
     accommodationsLastChecked,
     isRefreshing,
+    isOnline,
     refreshError,
     triggerRefresh,
   };
