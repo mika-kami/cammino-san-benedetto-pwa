@@ -3,15 +3,27 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { accommodations } from '../data/accommodations-combined';
 import { useDataRefresh } from '../hooks/useDataRefresh';
+import { localizeAccommodationNote } from '../utils/localizeAccommodationNote';
 
 const TYPES = ['all', 'ostello', 'hotel', 'bb', 'agriturismo', 'donativo', 'affittacamere', 'religious'] as const;
 const hasGps = (lat: number, lng: number) => Number.isFinite(lat) && Number.isFinite(lng) && lat !== 0 && lng !== 0;
 
 export default function AccommodationPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { accommodationsLastChecked } = useDataRefresh();
   const [filter, setFilter] = useState<string>('all');
   const [stageFilter, setStageFilter] = useState<number>(0);
+  const locale = i18n.language.startsWith('de')
+    ? 'de-DE'
+    : i18n.language.startsWith('cs')
+      ? 'cs-CZ'
+      : i18n.language.startsWith('it')
+        ? 'it-IT'
+        : i18n.language.startsWith('fr')
+          ? 'fr-FR'
+          : i18n.language.startsWith('nl')
+            ? 'nl-NL'
+            : 'en-GB';
 
   const filtered = accommodations.filter(a => {
     if (filter !== 'all' && a.type !== filter) return false;
@@ -44,7 +56,7 @@ export default function AccommodationPage() {
 
       <div style={{ fontSize: '0.85rem', color: 'var(--color-text-light)', marginBottom: '12px' }}>
         {filtered.length} {t('nav.accommodations')}
-        {filtered.length > 0 && ` · ${t('accommodation.last_scraped')}: ${new Date(accommodationsLastChecked || filtered[0].last_scraped).toLocaleDateString('en-GB', {
+        {filtered.length > 0 && ` · ${t('accommodation.last_scraped')}: ${new Date(accommodationsLastChecked || filtered[0].last_scraped).toLocaleString(locale, {
           day: '2-digit',
           month: '2-digit',
           year: 'numeric',
@@ -72,7 +84,11 @@ export default function AccommodationPage() {
             {acc.source && <span className="badge badge-source">{t(`accommodation.source.${acc.source}`)}</span>}
             {acc.rating && <span style={{ fontSize: '0.85rem' }}>⭐ {acc.rating} ({acc.rating_count})</span>}
           </div>
-          {acc.notes && <div style={{ fontSize: '0.85rem', fontStyle: 'italic', color: 'var(--color-text-light)' }}>{acc.notes}</div>}
+          {acc.notes && (
+            <div style={{ fontSize: '0.85rem', fontStyle: 'italic', color: 'var(--color-text-light)' }}>
+              {localizeAccommodationNote(acc.notes, i18n.language, t('accommodation.note_untranslated'))}
+            </div>
+          )}
           <div className="accommodation-actions">
             {acc.phone && <a href={`tel:${acc.phone}`} className="btn btn-sm btn-primary">📞 {t('accommodation.call')}</a>}
             {hasGps(acc.gps.lat, acc.gps.lng) && (

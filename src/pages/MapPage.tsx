@@ -77,7 +77,7 @@ export default function MapPage() {
       });
       L.marker([lastStage.end.gps.lat, lastStage.end.gps.lng], { icon: endIcon })
         .addTo(map)
-        .bindPopup('<b>Abbazia di Montecassino</b><br>End of the Cammino di San Benedetto');
+        .bindPopup(`<b>Abbazia di Montecassino</b><br>${t('map.finish_popup')}`);
     }
 
     // POI markers

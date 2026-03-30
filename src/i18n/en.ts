@@ -53,6 +53,8 @@ const en = {
     call: 'Call',
     directions: 'Directions',
     view_source: 'View Source',
+    view_official_site: 'View on official site',
+    note_untranslated: 'Note available on the source page.',
     source: {
       camminodibenedetto: 'Official Site',
       dormireincammino: 'Dormire in Cammino',
@@ -97,6 +99,7 @@ const en = {
     distance_to_end: 'Distance to End',
     zoom_to_route: 'Zoom to Route',
     offline_tiles_notice: 'Offline — only cached map areas available',
+    finish_popup: 'End of the Cammino di San Benedetto',
   },
   settings: {
     title: 'Settings',

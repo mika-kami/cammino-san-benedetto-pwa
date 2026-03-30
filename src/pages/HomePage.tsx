@@ -8,10 +8,21 @@ import { useDataRefresh } from '../hooks/useDataRefresh';
 import { LinkedText } from '../components/LinkedText';
 
 export default function HomePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { progress } = useProgress();
   const { liveAlerts, lastRefreshed, isRefreshing, isOnline, refreshError, triggerRefresh } = useDataRefresh();
   const [dismissedStatusKey, setDismissedStatusKey] = useState<string | null>(null);
+  const locale = i18n.language.startsWith('de')
+    ? 'de-DE'
+    : i18n.language.startsWith('cs')
+      ? 'cs-CZ'
+      : i18n.language.startsWith('it')
+        ? 'it-IT'
+        : i18n.language.startsWith('fr')
+          ? 'fr-FR'
+          : i18n.language.startsWith('nl')
+            ? 'nl-NL'
+            : 'en-GB';
 
   const completedCount = progress.stages_completed.length;
   const totalDistance = stages.reduce((sum, s) => sum + s.distance_km, 0).toFixed(0);
@@ -27,7 +38,7 @@ export default function HomePage() {
       : lastRefreshed
         ? {
             type: 'success' as const,
-            text: new Date(lastRefreshed).toLocaleString('en-GB', {
+            text: new Date(lastRefreshed).toLocaleString(locale, {
               day: '2-digit',
               month: '2-digit',
               year: 'numeric',
@@ -129,7 +140,7 @@ export default function HomePage() {
 
         {lastRefreshed && !statusMessage && (
           <div style={{ marginTop: '8px', fontSize: '0.8rem', color: 'var(--color-text-light)' }}>
-            {t('home.last_refreshed')}: {new Date(lastRefreshed).toLocaleString('it-IT')}
+            {t('home.last_refreshed')}: {new Date(lastRefreshed).toLocaleString(locale)}
           </div>
         )}
       </div>
@@ -152,7 +163,7 @@ export default function HomePage() {
                     rel="noopener noreferrer"
                     style={{ color: 'inherit', textDecoration: 'underline', display: 'block', marginTop: 4, fontSize: '0.75rem' }}
                   >
-                    View on official site ↗
+                    {t('accommodation.view_official_site')} ↗
                   </a>
                 )}
               </div>

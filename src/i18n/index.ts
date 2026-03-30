@@ -3,10 +3,11 @@ import { initReactI18next } from 'react-i18next';
 import en from './en';
 import it from './it';
 import de from './de';
+import cs from './cs';
 import fr from './fr';
 import nl from './nl';
 
-const SUPPORTED_LANGUAGES = ['it', 'en', 'de', 'fr', 'nl'] as const;
+const SUPPORTED_LANGUAGES = ['it', 'en', 'de', 'cs', 'fr', 'nl'] as const;
 type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
 
 function getStoredLanguage(): SupportedLanguage {
@@ -32,6 +33,7 @@ i18n.use(initReactI18next).init({
     en: { translation: en },
     it: { translation: it },
     de: { translation: de },
+    cs: { translation: cs },
     fr: { translation: fr },
     nl: { translation: nl },
   },

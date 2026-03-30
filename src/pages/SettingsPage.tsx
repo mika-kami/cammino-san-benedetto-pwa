@@ -7,6 +7,7 @@ const LANGUAGES = [
   { code: 'it', label: 'Italiano' },
   { code: 'en', label: 'English' },
   { code: 'de', label: 'Deutsch' },
+  { code: 'cs', label: 'Cestina' },
   { code: 'fr', label: 'Français' },
   { code: 'nl', label: 'Nederlands' },
 ];

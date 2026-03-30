@@ -53,6 +53,8 @@ const it = {
     call: 'Chiama',
     directions: 'Indicazioni',
     view_source: 'Vedi Fonte',
+    view_official_site: 'Vedi sul sito ufficiale',
+    note_untranslated: 'Nota disponibile nella pagina di origine.',
     source: {
       camminodibenedetto: 'Sito Ufficiale',
       dormireincammino: 'Dormire in Cammino',
@@ -97,6 +99,7 @@ const it = {
     distance_to_end: 'Distanza alla Fine',
     zoom_to_route: 'Zoom sul Percorso',
     offline_tiles_notice: 'Offline — solo le aree della mappa già visitate',
+    finish_popup: 'Fine del Cammino di San Benedetto',
   },
   settings: {
     title: 'Impostazioni',

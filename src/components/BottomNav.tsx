@@ -50,7 +50,7 @@ export default function BottomNav() {
     <nav className="bottom-nav">
       <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} end>
         <HomeIcon />
-        <span>Home</span>
+        <span>{t('nav.home')}</span>
       </NavLink>
       <NavLink to="/stages" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
         <StagesIcon />
