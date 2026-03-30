@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { accommodations } from '../data/accommodations';
+import { accommodations } from '../data/accommodations-combined';
 import { useDataRefresh } from '../hooks/useDataRefresh';
 
 const TYPES = ['all', 'ostello', 'hotel', 'bb', 'agriturismo', 'donativo', 'affittacamere', 'religious'] as const;
+const hasGps = (lat: number, lng: number) => Number.isFinite(lat) && Number.isFinite(lng) && lat !== 0 && lng !== 0;
 
 export default function AccommodationPage() {
   const { t } = useTranslation();
@@ -74,7 +75,9 @@ export default function AccommodationPage() {
           {acc.notes && <div style={{ fontSize: '0.85rem', fontStyle: 'italic', color: 'var(--color-text-light)' }}>{acc.notes}</div>}
           <div className="accommodation-actions">
             {acc.phone && <a href={`tel:${acc.phone}`} className="btn btn-sm btn-primary">📞 {t('accommodation.call')}</a>}
-            <Link to={`/map?lat=${acc.gps.lat}&lng=${acc.gps.lng}`} className="btn btn-sm btn-secondary">📍</Link>
+            {hasGps(acc.gps.lat, acc.gps.lng) && (
+              <Link to={`/map?lat=${acc.gps.lat}&lng=${acc.gps.lng}`} className="btn btn-sm btn-secondary">📍</Link>
+            )}
             {acc.source_url && <a href={acc.source_url} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-secondary">🔗</a>}
           </div>
         </div>

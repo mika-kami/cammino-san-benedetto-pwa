@@ -4,10 +4,12 @@ import { useSearchParams } from 'react-router-dom';
 import L from 'leaflet';
 import { stages } from '../data/stages';
 import { pois } from '../data/pois';
-import { accommodations } from '../data/accommodations';
+import { accommodations } from '../data/accommodations-combined';
 import { alerts } from '../data/alerts';
 import { stageRoutes } from '../data/routes';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
+
+const hasGps = (lat: number, lng: number) => Number.isFinite(lat) && Number.isFinite(lng) && lat !== 0 && lng !== 0;
 
 export default function MapPage() {
   const { t } = useTranslation();
@@ -94,7 +96,7 @@ export default function MapPage() {
 
     // Accommodation markers
     const accMarkers: { marker: L.Marker; lat: number; lng: number }[] = [];
-    accommodations.forEach(acc => {
+    accommodations.filter(acc => hasGps(acc.gps.lat, acc.gps.lng)).forEach(acc => {
       const icon = L.divIcon({
         className: 'acc-marker',
         html: `<div style="background:#2196F3;width:10px;height:10px;border-radius:50%;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,0.3)"></div>`,

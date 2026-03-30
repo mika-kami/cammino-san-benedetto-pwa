@@ -11,7 +11,7 @@ export default function HomePage() {
   const { t } = useTranslation();
   const { progress } = useProgress();
   const { liveAlerts, lastRefreshed, isRefreshing, isOnline, refreshError, triggerRefresh } = useDataRefresh();
-  const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [dismissedStatusKey, setDismissedStatusKey] = useState<string | null>(null);
 
   const completedCount = progress.stages_completed.length;
   const totalDistance = stages.reduce((sum, s) => sum + s.distance_km, 0).toFixed(0);
@@ -19,35 +19,37 @@ export default function HomePage() {
   // Use live alerts when available, otherwise fall back to static
   const alerts = liveAlerts.length > 0 ? liveAlerts : staticAlerts;
   const activeAlerts = alerts.filter(a => a.severity === 'closed' || a.severity === 'warning');
+  const statusKey = refreshError ? `error:${refreshError}` : lastRefreshed ? `success:${lastRefreshed}` : null;
+  const statusMessage = statusKey === dismissedStatusKey || isRefreshing
+    ? null
+    : refreshError
+      ? { type: 'error' as const, text: refreshError }
+      : lastRefreshed
+        ? {
+            type: 'success' as const,
+            text: new Date(lastRefreshed).toLocaleString('en-GB', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false,
+            }),
+          }
+        : null;
 
   const handleRefresh = async () => {
-    setStatusMessage(null);
+    setDismissedStatusKey(null);
     await triggerRefresh();
   };
 
-  // Show status after refresh completes
   useEffect(() => {
-    if (isRefreshing) return;
-    if (refreshError) {
-      setStatusMessage({ type: 'error', text: refreshError });
-      const timer = setTimeout(() => setStatusMessage(null), 5000);
-      return () => clearTimeout(timer);
-    }
-    if (lastRefreshed) {
-      setStatusMessage({
-        type: 'success', text: new Date(lastRefreshed).toLocaleString('en-GB', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false // For 24-hour time, often used in Europe
-        })
-      });
-      const timer = setTimeout(() => setStatusMessage(null), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isRefreshing, refreshError, lastRefreshed]);
+    if (!statusKey || isRefreshing) return;
+
+    const timeoutMs = refreshError ? 5000 : 3000;
+    const timer = setTimeout(() => setDismissedStatusKey(statusKey), timeoutMs);
+    return () => clearTimeout(timer);
+  }, [statusKey, isRefreshing, refreshError]);
 
   return (
     <div className="page">

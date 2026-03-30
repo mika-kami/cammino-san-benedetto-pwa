@@ -6,6 +6,7 @@
   "engines": { "node": "22.x" },
   "scripts": {
     "parse-gpx": "tsx scripts/parse-gpx.ts",
+    "scrape-accommodations": "tsx scripts/scrape-accommodations.ts",
     "predev": "npm run parse-gpx",
     "dev": "vite",
     "prebuild": "npm run parse-gpx",

@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { stages } from '../data/stages';
-import { accommodations } from '../data/accommodations';
+import { accommodations } from '../data/accommodations-combined';
 import { pois } from '../data/pois';
 import { alerts } from '../data/alerts';
 import { stampPoints } from '../data/stamps';
@@ -9,6 +9,7 @@ import { useProgress } from '../hooks/useProgress';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
 import ElevationProfile from '../components/ElevationProfile';
 
+const hasGps = (lat: number, lng: number) => Number.isFinite(lat) && Number.isFinite(lng) && lat !== 0 && lng !== 0;
 
 export default function StageDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -137,7 +138,9 @@ export default function StageDetailPage() {
                 {acc.phone && (
                   <a href={`tel:${acc.phone}`} className="btn btn-sm btn-primary">📞 {t('accommodation.call')}</a>
                 )}
-                <Link to={`/map?lat=${acc.gps.lat}&lng=${acc.gps.lng}`} className="btn btn-sm btn-secondary">📍 {t('accommodation.directions')}</Link>
+                {hasGps(acc.gps.lat, acc.gps.lng) && (
+                  <Link to={`/map?lat=${acc.gps.lat}&lng=${acc.gps.lng}`} className="btn btn-sm btn-secondary">📍 {t('accommodation.directions')}</Link>
+                )}
               </div>
             </div>
           ))}
